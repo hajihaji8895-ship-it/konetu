@@ -1,0 +1,411 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>光熱費の相場チェッカー | あなたの電気・ガス・水道代を簡単診断</title>
+    <style>
+        body { font-family: sans-serif; background-color: #f4f6f9; margin: 0; padding: 20px; display: flex; justify-content: center; }
+        .card { background: #ffffff; padding: 24px; border-radius: 12px; max-width: 500px; width: 100%; box-shadow: 0 4px 12px rgba(0,0,0,0.08); }
+        h1 { font-size: 1.3rem; text-align: center; color: #1a56db; margin-bottom: 12px; }
+        .intro-text { font-size: 0.85rem; color: #555; line-height: 1.5; margin-bottom: 20px; border-bottom: 1px solid #eee; padding-bottom: 12px; }
+        .form-group { margin-bottom: 16px; }
+        label { display: block; font-size: 0.9rem; font-weight: bold; margin-bottom: 6px; color: #444; }
+        select, input[type="text"] { width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 6px; box-sizing: border-box; font-size: 1rem; }
+        .radio-group { display: flex; gap: 15px; font-size: 0.9rem; flex-wrap: wrap; }
+        .radio-group label { font-weight: normal; cursor: pointer; }
+        .item-box { background: #f8f9fa; border: 1px solid #e9ecef; padding: 12px; border-radius: 8px; margin-bottom: 12px; }
+        .checkbox-label { display: flex; align-items: center; gap: 8px; font-weight: bold; cursor: pointer; margin-bottom: 6px; }
+        .field-note { font-size: 0.75rem; color: #666; margin-top: 6px; display: block; }
+        .btn { width: 100%; padding: 12px; background: #28a745; color: white; border: none; border-radius: 6px; font-size: 1.1rem; font-weight: bold; cursor: pointer; margin-top: 10px; }
+        .btn:hover { background: #218838; }
+        .result { margin-top: 20px; padding: 16px; background: #eef6ff; border-radius: 8px; display: none; }
+        .result-title { font-size: 1.1rem; font-weight: bold; color: #d9534f; text-align: center; margin-bottom: 12px; }
+        .guide-box { margin-top: 24px; background: #fafafa; border: 1px solid #eee; padding: 16px; border-radius: 8px; font-size: 0.85rem; line-height: 1.6; color: #333; }
+        .guide-box h2 { font-size: 0.95rem; color: #1a56db; margin-top: 0; border-bottom: 2px solid #1a56db; padding-bottom: 4px; }
+        .disclaimer { margin-top: 20px; font-size: 0.75rem; color: #777; line-height: 1.4; text-align: center; border-top: 1px solid #eee; padding-top: 12px; }
+        .info-section { margin-top: 24px; padding-top: 16px; border-top: 1px solid #ddd; font-size: 0.8rem; color: #555; line-height: 1.5; }
+        .info-section h2 { font-size: 0.9rem; color: #333; margin-top: 12px; margin-bottom: 6px; }
+        
+        /* 広告枠スタイル（2つ並ぶようCSSを修正） */
+        .ad-container { margin-top: 20px; text-align: center; background: #f9f9f9; padding: 15px; border-radius: 8px; border: 1px solid #eaeaea; }
+        .ad-title { font-weight: bold; margin-bottom: 12px; color: #333; font-size: 0.9rem; width: 100%; }
+        .ad-flex-wrapper { display: flex; flex-wrap: wrap; justify-content: center; gap: 10px; }
+        .ad-box { margin-bottom: 10px; }
+    </style>
+</head>
+<body>
+
+<div class="card">
+    <h1>⚡ 光熱費の相場チェッカー</h1>
+    
+    <div class="intro-text">
+        毎月の電気代・ガス代・水道代が高すぎてお悩みではありませんか？<br>
+        お住まいの地域や世帯人数、季節（月）を入力するだけで、全国統計データを基にした相場と比較・診断ができます。
+    </div>
+
+    <!-- 1. 世帯人数 -->
+    <div class="form-group">
+        <label for="household">世帯人数</label>
+        <select id="household">
+            <option value="1">1人（単身）</option>
+            <option value="2" selected>2人</option>
+            <option value="3">3人</option>
+            <option value="4">4人</option>
+            <option value="5">5人</option>
+            <option value="6">6人以上</option>
+        </select>
+    </div>
+
+    <!-- 2. 都道府県 -->
+    <div class="form-group">
+        <label for="prefecture">お住まいの都道府県</label>
+        <select id="prefecture">
+            <option value="hokkaido">北海道</option><option value="aomori">青森県</option><option value="iwate">岩手県</option>
+            <option value="miyagi">宮城県</option><option value="akita">秋田県</option><option value="yamagata">山形県</option>
+            <option value="fukushima">福島県</option><option value="ibaraki">茨城県</option><option value="tochigi">栃木県</option>
+            <option value="gunma">群馬県</option><option value="saitama">埼玉県</option><option value="chiba">千葉県</option>
+            <option value="tokyo">東京都</option><option value="kanagawa">神奈川県</option><option value="niigata">新潟県</option>
+            <option value="toyama">富山県</option><option value="ishikawa">石川県</option><option value="fukui">福井県</option>
+            <option value="yamanashi">山梨県</option><option value="nagano">長野県</option><option value="gifu">岐阜県</option>
+            <option value="shizuoka">静岡県</option><option value="aichi">愛知県</option><option value="mie">三重県</option>
+            <option value="shiga">滋賀県</option><option value="kyoto">京都府</option><option value="osaka">大阪府</option>
+            <option value="hyogo">兵庫県</option><option value="nara">奈良県</option><option value="wakayama">和歌山県</option>
+            <option value="tottori">鳥取県</option><option value="shimane">島根県</option><option value="okayama">岡山県</option>
+            <option value="hiroshima">広島県</option><option value="yamaguchi">山口県</option><option value="tokushima">徳島県</option>
+            <option value="kagawa">香川県</option><option value="ehime">愛媛県</option><option value="kochi">高知県</option>
+            <option value="fukuoka" selected>福岡県</option><option value="saga">佐賀県</option><option value="nagasaki">長崎県</option>
+            <option value="kumamoto">熊本県</option><option value="oita">大分県</option><option value="miyazaki">宮崎県</option>
+            <option value="kagoshima">鹿児島県</option><option value="okinawa">沖縄県</option>
+        </select>
+    </div>
+
+    <!-- 3. 対象月 -->
+    <div class="form-group">
+        <label for="month">対象の月</label>
+        <select id="month">
+            <option value="1">1月（冬・寒冷期）</option><option value="2">2月（冬・最寒期）</option><option value="3">3月（冬〜春）</option>
+            <option value="4" selected>4月（春・標準）</option><option value="5">5月（春・標準）</option><option value="6">6月（初夏）</option>
+            <option value="7">7月（夏・猛暑期）</option><option value="8">8月（夏・最暑期）</option><option value="9">9月（残暑）</option>
+            <option value="10">10月（秋・標準）</option><option value="11">11月（秋〜冬）</option><option value="12">12月（冬・寒冷期）</option>
+        </select>
+    </div>
+
+    <!-- 4. ガス種別 -->
+    <div class="form-group">
+        <label>ガスの種別</label>
+        <div class="radio-group">
+            <label><input type="radio" name="gasType" value="city" checked onclick="toggleGasInput(true)"> 都市ガス</label>
+            <label><input type="radio" name="gasType" value="lp" onclick="toggleGasInput(true)"> プロパンガス（LP）</label>
+            <label><input type="radio" name="gasType" value="all_electric" onclick="toggleGasInput(false)"> オール電化（ガスなし）</label>
+        </div>
+    </div>
+
+    <hr style="border: 0; border-top: 1px solid #eee; margin: 20px 0;">
+
+    <!-- 電気代入力 -->
+    <div class="item-box">
+        <label class="checkbox-label">
+            <input type="checkbox" id="checkElec" checked> 電気代を比較する
+        </label>
+        <input type="text" id="inputElec" placeholder="例: 9500">
+    </div>
+
+    <!-- ガス代入力 -->
+    <div class="item-box" id="gasItemBox">
+        <label class="checkbox-label">
+            <input type="checkbox" id="checkGas" checked> ガス代を比較する
+        </label>
+        <input type="text" id="inputGas" placeholder="例: 5000">
+    </div>
+
+    <!-- 水道代入力 -->
+    <div class="item-box">
+        <label class="checkbox-label">
+            <input type="checkbox" id="checkWater"> 水道代を比較する
+        </label>
+        <input type="text" id="inputWater" placeholder="例: 4000">
+        <div class="field-note">
+            入力した金額の計算単位：
+            <label style="margin-left: 5px;"><input type="radio" name="waterPeriod" value="1" checked> 1ヶ月分</label>
+            <label style="margin-left: 5px;"><input type="radio" name="waterPeriod" value="2"> 2ヶ月分</label>
+        </div>
+    </div>
+
+    <button class="btn" onclick="diagnose()">診断してみる</button>
+
+    <!-- 結果表示エリア -->
+    <div id="resultBox" class="result">
+        <div class="result-title" id="resultLevel"></div>
+        <div id="resultDetails" style="font-size:0.9rem; line-height:1.6;"></div>
+
+        <!-- ★ 広告表示エリア ★ -->
+        <div class="ad-container" id="adContainer">
+            <div class="ad-title">💡 光熱費を安くするための無料診断・見積もり</div>
+            <div class="ad-flex-wrapper">
+                <!-- 電気チョイス（電気代比較） -->
+                <div class="ad-box" id="adElec" style="display: none;">
+                    <a href="https://px.a8.net/svt/ejp?a8mat=4BCNG9+GFSW36+3SPO+TU8U9" rel="nofollow">
+                    <img border="0" width="300" height="250" alt="" src="https://www23.a8.net/svt/bgt?aid=260930745994&wid=001&eno=01&mid=s00000017718005012000&mc=1"></a>
+                    <img border="0" width="1" height="1" src="https://www16.a8.net/0.gif?a8mat=4BCNG9+GFSW36+3SPO+TU8U9" alt="">
+                </div>
+
+                <!-- ガス屋の窓口（プロパンガス比較） -->
+                <div class="ad-box" id="adGas" style="display: none;">
+                    <a href="https://px.a8.net/svt/ejp?a8mat=4BCNGA+EVUWI+3SDQ+614CX" rel="nofollow">
+                    <img border="0" width="300" height="250" alt="" src="https://www24.a8.net/svt/bgt?aid=260930746025&wid=001&eno=01&mid=s00000017675001013000&mc=1"></a>
+                    <img border="0" width="1" height="1" src="https://www13.a8.net/0.gif?a8mat=4BCNGA+EVUWI+3SDQ+614CX" alt="">
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ガイド解説 -->
+    <div class="guide-box">
+        <h2>💡 光熱費を節約するための基本アドバイス</h2>
+        <p><strong>1. 電気代の見直しポイント</strong><br>
+        エアコンの使用量が増える夏場や冬場は、古い家電を省エネ性能が高い最新モデルに買い替えるだけで年間数千円〜数万円の節約になります。また、新電力への契約切り替えも効果的です。</p>
+        <p><strong>2. ガス代（特にプロパンガス）の見直し</strong><br>
+        プロパンガス（LPガス）は自由価格設定のため、会社によって基本料金や従量料金が大幅に異なります。ガス会社を比較して切り替えることで、大きな節約につながる場合があります。</p>
+    </div>
+
+    <div class="disclaimer">
+        ※本ツールの相場データは、総務省「家計調査」等の統計データを基にした独自のシミュレーション値です。<br>
+        ※季節・使用器具・契約プラン等により実際の金額と異なる場合があります。
+    </div>
+
+    <!-- 免責事項 -->
+    <div class="info-section">
+        <h2>免責事項</h2>
+        <p>当サイトで提供する診断結果および情報は、統計データを基にした目安であり、正確性や完全性を保証するものではありません。本サイトの利用により生じた損害やトラブルについて、当方は一切の責任を負いかねます。</p>
+    </div>
+
+    <!-- 関連ツールリンクエリア（カード内・縦並び） -->
+    <div style="margin-top: 30px; padding: 15px; background-color: #f9f9f9; border-radius: 8px;">
+      <h3 style="font-size: 16px; margin-bottom: 10px; color: #333;">便利な関連ツール</h3>
+      <ul style="list-style: none; padding-left: 0; margin: 0;">
+        <li style="margin-bottom: 8px;">👉 <a href="https://shoumikigen.pages.dev/" style="text-decoration: none; color: #1a56db;">賞味期限管理</a></li>
+        <li style="margin-bottom: 8px;">👉 <a href="https://kaimono-4nt.pages.dev/" style="text-decoration: none; color: #1a56db;">買い物リスト</a></li>
+        <li style="margin-bottom: 8px;">👉 <a href="https://poinnto.pages.dev/" style="text-decoration: none; color: #1a56db;">ポイ活管理</a></li>
+        <li style="margin-bottom: 8px;">👉 <a href="https://souji-aap.pages.dev/" style="text-decoration: none; color: #1a56db;">掃除管理</a></li>
+        <li style="margin-bottom: 0;">👉 <a href="https://running-29c.pages.dev/" style="text-decoration: none; color: #1a56db;">ランニング記録</a></li>
+      </ul>
+    </div>
+</div>
+
+<script>
+const monthlyFactors = {
+    1: { elec: 1.35, gas: 1.45, water: 1.05 }, 2: { elec: 1.40, gas: 1.50, water: 1.05 },
+    3: { elec: 1.20, gas: 1.25, water: 1.00 }, 4: { elec: 1.00, gas: 1.00, water: 1.00 },
+    5: { elec: 0.95, gas: 0.90, water: 1.00 }, 6: { elec: 1.05, gas: 0.85, water: 1.00 },
+    7: { elec: 1.25, gas: 0.80, water: 1.10 }, 8: { elec: 1.30, gas: 0.80, water: 1.15 },
+    9: { elec: 1.15, gas: 0.85, water: 1.05 }, 10: { elec: 0.95, gas: 0.95, water: 1.00 },
+    11: { elec: 1.10, gas: 1.20, water: 1.00 }, 12: { elec: 1.30, gas: 1.35, water: 1.05 }
+};
+
+const prefElecFactor = {
+    hokkaido: 1.25, aomori: 1.18, iwate: 1.18, miyagi: 1.18, akita: 1.18, yamagata: 1.18, fukushima: 1.18,
+    ibaraki: 1.00, tochigi: 1.00, gunma: 1.00, saitama: 1.00, chiba: 1.00, tokyo: 1.00, kanagawa: 1.00, yamanashi: 1.00,
+    niigata: 1.10, toyama: 1.10, ishikawa: 1.10, fukui: 1.10, nagano: 0.98, gifu: 0.98, shizuoka: 0.98, aichi: 0.98, mie: 0.98,
+    shiga: 0.95, kyoto: 0.95, osaka: 0.95, hyogo: 0.95, nara: 0.95, wakayama: 0.95,
+    tottori: 1.02, shimane: 1.02, okayama: 1.02, hiroshima: 1.02, yamaguchi: 1.02,
+    tokushima: 1.05, kagawa: 1.05, ehime: 1.05, kochi: 1.05,
+    fukuoka: 0.92, saga: 0.92, nagasaki: 0.92, kumamoto: 0.92, oita: 0.92, miyazaki: 0.92, kagoshima: 0.92, okinawa: 1.15
+};
+
+const prefGasFactor = {
+    hokkaido: 1.30, aomori: 1.20, iwate: 1.20, miyagi: 1.15, akita: 1.20, yamagata: 1.20, fukushima: 1.15,
+    ibaraki: 1.00, tochigi: 1.00, gunma: 1.00, saitama: 1.00, chiba: 1.00, tokyo: 1.00, kanagawa: 1.00, yamanashi: 1.05,
+    niigata: 1.10, toyama: 1.05, ishikawa: 1.05, fukui: 1.05, nagano: 1.10, gifu: 1.00, shizuoka: 1.00, aichi: 1.00, mie: 1.00,
+    shiga: 0.98, kyoto: 0.98, osaka: 0.98, hyogo: 0.98, nara: 0.98, wakayama: 1.00,
+    tottori: 1.05, shimane: 1.05, okayama: 1.00, hiroshima: 1.00, yamaguchi: 1.00,
+    tokushima: 1.05, kagawa: 1.05, ehime: 1.05, kochi: 1.05,
+    fukuoka: 0.95, saga: 0.95, nagasaki: 1.00, kumamoto: 1.00, oita: 1.00, miyazaki: 1.05, kagoshima: 1.05, okinawa: 1.20
+};
+
+const prefWaterData = {
+    hokkaido: { 1: 2700, 2: 4600, 3: 6300, 4: 7600, 5: 8800, 6: 10000 },
+    aomori: { 1: 2600, 2: 4500, 3: 6100, 4: 7400, 5: 8600, 6: 9800 },
+    iwate: { 1: 2500, 2: 4400, 3: 6000, 4: 7300, 5: 8500, 6: 9700 },
+    miyagi: { 1: 2400, 2: 4300, 3: 5800, 4: 7100, 5: 8300, 6: 9500 },
+    akita: { 1: 2500, 2: 4400, 3: 6000, 4: 7300, 5: 8500, 6: 9700 },
+    yamagata: { 1: 2400, 2: 4300, 3: 5900, 4: 7200, 5: 8400, 6: 9600 },
+    fukushima: { 1: 2300, 2: 4200, 3: 5700, 4: 7000, 5: 8200, 6: 9400 },
+    ibaraki: { 1: 2300, 2: 4100, 3: 5600, 4: 6900, 5: 8100, 6: 9300 },
+    tochigi: { 1: 2200, 2: 4000, 3: 5500, 4: 6800, 5: 8000, 6: 9200 },
+    gunma: { 1: 2100, 2: 3900, 3: 5400, 4: 6700, 5: 7900, 6: 9100 },
+    saitama: { 1: 2300, 2: 4100, 3: 5700, 4: 6900, 5: 8100, 6: 9300 },
+    chiba: { 1: 2300, 2: 4100, 3: 5700, 4: 6900, 5: 8100, 6: 9300 },
+    tokyo: { 1: 2400, 2: 4200, 3: 5800, 4: 7000, 5: 8200, 6: 9400 },
+    kanagawa: { 1: 2300, 2: 4100, 3: 5700, 4: 6900, 5: 8100, 6: 9300 },
+    niigata: { 1: 2300, 2: 4200, 3: 5700, 4: 7000, 5: 8200, 6: 9400 },
+    toyama: { 1: 2100, 2: 3800, 3: 5200, 4: 6400, 5: 7600, 6: 8800 },
+    ishikawa: { 1: 2200, 2: 3900, 3: 5400, 4: 6600, 5: 7800, 6: 9000 },
+    fukui: { 1: 2200, 2: 3900, 3: 5400, 4: 6600, 5: 7800, 6: 9000 },
+    yamanashi: { 1: 2200, 2: 4000, 3: 5500, 4: 6700, 5: 7900, 6: 9100 },
+    nagano: { 1: 2300, 2: 4100, 3: 5600, 4: 6800, 5: 8000, 6: 9200 },
+    gifu: { 1: 2100, 2: 3800, 3: 5300, 4: 6500, 5: 7700, 6: 8900 },
+    shizuoka: { 1: 2200, 2: 3900, 3: 5400, 4: 6600, 5: 7800, 6: 9000 },
+    aichi: { 1: 2100, 2: 3800, 3: 5300, 4: 6500, 5: 7700, 6: 8900 },
+    mie: { 1: 2200, 2: 4000, 3: 5500, 4: 6700, 5: 7900, 6: 9100 },
+    shiga: { 1: 2100, 2: 3800, 3: 5300, 4: 6500, 5: 7700, 6: 8900 },
+    kyoto: { 1: 2300, 2: 4000, 3: 5600, 4: 6800, 5: 8000, 6: 9200 },
+    osaka: { 1: 2200, 2: 3900, 3: 5500, 4: 6700, 5: 7900, 6: 9100 },
+    hyogo: { 1: 2300, 2: 4100, 3: 5700, 4: 6900, 5: 8100, 6: 9300 },
+    nara: { 1: 2300, 2: 4100, 3: 5700, 4: 6900, 5: 8100, 6: 9300 },
+    wakayama: { 1: 2200, 2: 4000, 3: 5500, 4: 6700, 5: 7900, 6: 9100 },
+    tottori: { 1: 2300, 2: 4100, 3: 5600, 4: 6800, 5: 8000, 6: 9200 },
+    shimane: { 1: 2300, 2: 4100, 3: 5600, 4: 6800, 5: 8000, 6: 9200 },
+    okayama: { 1: 2200, 2: 3900, 3: 5400, 4: 6600, 5: 7800, 6: 9000 },
+    hiroshima: { 1: 2200, 2: 4000, 3: 5500, 4: 6700, 5: 7900, 6: 9100 },
+    yamaguchi: { 1: 2300, 2: 4100, 3: 5600, 4: 6800, 5: 8000, 6: 9200 },
+    tokushima: { 1: 2300, 2: 4100, 3: 5600, 4: 6800, 5: 8000, 6: 9200 },
+    kagawa: { 1: 2300, 2: 4100, 3: 5600, 4: 6800, 5: 8000, 6: 9200 },
+    ehime: { 1: 2200, 2: 4000, 3: 5500, 4: 6700, 5: 7900, 6: 9100 },
+    kochi: { 1: 2300, 2: 4100, 3: 5600, 4: 6800, 5: 8000, 6: 9200 },
+    fukuoka: { 1: 2100, 2: 3700, 3: 5000, 4: 6100, 5: 7200, 6: 8300 },
+    saga: { 1: 2200, 2: 3900, 3: 5300, 4: 6500, 5: 7700, 6: 8900 },
+    nagasaki: { 1: 2300, 2: 4000, 3: 5500, 4: 6700, 5: 7900, 6: 9100 },
+    kumamoto: { 1: 2000, 2: 3600, 3: 4900, 4: 6000, 5: 7100, 6: 8200 },
+    oita: { 1: 2200, 2: 3900, 3: 5300, 4: 6500, 5: 7700, 6: 8900 },
+    miyazaki: { 1: 2100, 2: 3800, 3: 5200, 4: 6400, 5: 7600, 6: 8800 },
+    kagoshima: { 1: 2200, 2: 3900, 3: 5300, 4: 6600, 5: 7800, 6: 8900 },
+    okinawa: { 1: 2200, 2: 3900, 3: 5400, 4: 6600, 5: 7800, 6: 9000 }
+};
+
+const defaultWaterData = { 1: 2200, 2: 4000, 3: 5400, 4: 6600, 5: 7800, 6: 9000 };
+
+const baseData = {
+    1: { elec: 6500, gas: 3300 },
+    2: { elec: 9800, gas: 4800 },
+    3: { elec: 11500, gas: 5500 },
+    4: { elec: 12500, gas: 6000 },
+    5: { elec: 13500, gas: 6500 },
+    6: { elec: 14500, gas: 7000 }
+};
+
+function toggleGasInput(enable) {
+    const gasBox = document.getElementById("gasItemBox");
+    const checkGas = document.getElementById("checkGas");
+    if (enable) {
+        gasBox.style.display = "block";
+    } else {
+        gasBox.style.display = "none";
+        checkGas.checked = false;
+    }
+}
+
+function parseInputValue(id) {
+    const el = document.getElementById(id);
+    if (!el) return null;
+    let str = el.value.replace(/[Ａ-Ｚａ-ｚ０-９]/g, function(s) {
+        return String.fromCharCode(s.charCodeAt(0) - 0xfee0);
+    }).trim();
+    if (str === "") return null;
+    const val = parseFloat(str);
+    if (isNaN(val) || val < 0) return -1;
+    return val;
+}
+
+function diagnose() {
+    const household = document.getElementById("household").value;
+    const pref = document.getElementById("prefecture").value;
+    const month = document.getElementById("month").value;
+    const gasTypeEl = document.querySelector('input[name="gasType"]:checked');
+    const gasType = gasTypeEl ? gasTypeEl.value : "city";
+
+    const factors = monthlyFactors[month];
+    const gasTypeFactor = (gasType === "lp") ? 1.5 : 1.0;
+    const elecAreaFactor = prefElecFactor[pref] || 1.0;
+    const gasAreaFactor = prefGasFactor[pref] || 1.0;
+    const allElectricFactor = (gasType === "all_electric") ? 1.5 : 1.0;
+
+    const avgElec = Math.round(baseData[household].elec * factors.elec * elecAreaFactor * allElectricFactor);
+    const avgGas = Math.round(baseData[household].gas * factors.gas * gasTypeFactor * gasAreaFactor);
+    
+    const waterBase = prefWaterData[pref] || defaultWaterData;
+    const avgWater = Math.round(waterBase[household] * factors.water);
+
+    let details = "";
+    let totalDiff = 0;
+    let count = 0;
+
+    const isElecChecked = document.getElementById("checkElec").checked;
+    const isGasChecked = document.getElementById("checkGas").checked;
+
+    if (isElecChecked) {
+        const val = parseInputValue("inputElec");
+        if (val === -1) {
+            alert("電気代には0以上の正しい数値を入力してください。");
+            return;
+        } else if (val !== null) {
+            const diff = val - avgElec;
+            totalDiff += diff;
+            count++;
+            details += `・電気代: ${month}月相場（${avgElec.toLocaleString()}円）より <b>${diff > 0 ? diff.toLocaleString() + '円高い' : Math.abs(diff).toLocaleString() + '円安い'}</b><br>`;
+        }
+    }
+
+    if (gasType !== "all_electric" && isGasChecked) {
+        const val = parseInputValue("inputGas");
+        if (val === -1) {
+            alert("ガス代には0以上の正しい数値を入力してください。");
+            return;
+        } else if (val !== null) {
+            const diff = val - avgGas;
+            totalDiff += diff;
+            count++;
+            details += `・ガス代: ${month}月相場（${avgGas.toLocaleString()}円）より <b>${diff > 0 ? diff.toLocaleString() + '円高い' : Math.abs(diff).toLocaleString() + '円安い'}</b><br>`;
+        }
+    }
+
+    if (document.getElementById("checkWater").checked) {
+        let val = parseInputValue("inputWater");
+        if (val === -1) {
+            alert("水道代には0以上の正しい数値を入力してください。");
+            return;
+        } else if (val !== null) {
+            const periodEl = document.querySelector('input[name="waterPeriod"]:checked');
+            const period = periodEl ? periodEl.value : "1";
+            if (period === "2") {
+                val = val / 2;
+            }
+            const diff = Math.round(val - avgWater);
+            totalDiff += diff;
+            count++;
+            details += `・水道代: 都道府県相場（1ヶ月あたり${avgWater.toLocaleString()}円）より <b>${diff > 0 ? diff.toLocaleString() + '円高い' : Math.abs(diff).toLocaleString() + '円安い'}</b><br>`;
+        }
+    }
+
+    if (count === 0) {
+        alert("比較する項目のチェックを入れ、金額を入力してください。");
+        return;
+    }
+
+    let level = "";
+    if (totalDiff <= -2000) level = "🏆 節約レベル: S（神レベル）";
+    else if (totalDiff <= 0) level = "👍 節約レベル: A（優秀）";
+    else if (totalDiff <= 3000) level = "⚠️ 節約レベル: B（やや高め）";
+    else level = "🚨 節約レベル: C（見直し推奨）";
+
+    // 広告表示制御
+    const adElec = document.getElementById("adElec");
+    const adGas = document.getElementById("adGas");
+
+    let showElecAd = isElecChecked;
+    let showGasAd = isGasChecked && (gasType === "lp");
+
+    if (!showElecAd && !showGasAd) {
+        showElecAd = true;
+    }
+
+    adElec.style.display = showElecAd ? "inline-block" : "none";
+    adGas.style.display = showGasAd ? "inline-block" : "none";
+
+    document.getElementById("resultLevel").innerText = level;
+    document.getElementById("resultDetails").innerHTML = details;
+    document.getElementById("resultBox").style.display = "block";
+}
+</script>
+</body>
+</html>
